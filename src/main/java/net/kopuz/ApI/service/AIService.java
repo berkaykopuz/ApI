@@ -1,8 +1,8 @@
 package net.kopuz.ApI.service;
 
+import net.kopuz.ApI.exception.BadQueryRequestException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +14,11 @@ public class AIService {
     }
 
     public String chat(String prompt){
-       return chatClient.prompt(prompt).call().content();
+
+        if(prompt.isEmpty()){
+            throw new BadQueryRequestException("Client entry must be fulfilled!");
+        }
+
+        return chatClient.prompt(prompt).call().content();
     }
 }
