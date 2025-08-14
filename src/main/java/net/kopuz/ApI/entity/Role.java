@@ -11,4 +11,7 @@ public class Role {
     private Long id;
     private String rolename;
 
+    public String getRolename() {
+        return rolename;
+    }
 }
