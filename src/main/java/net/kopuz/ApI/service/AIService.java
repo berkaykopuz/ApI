@@ -2,6 +2,7 @@ package net.kopuz.ApI.service;
 
 import net.kopuz.ApI.exception.BadQueryRequestException;
 import net.kopuz.ApI.tool.DateTool;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -24,11 +25,10 @@ public class AIService {
             throw new BadQueryRequestException("Client entry must be fulfilled!");
         }
 
-        ChatResponse response = chatModel.call(
-                new Prompt(
-                        query
-                ));
-
-        return response.getResult().getOutput().getText();
+        return ChatClient.create(chatModel)
+                .prompt(query)
+                .tools(dateTool)
+                .call()
+                .content();
     }
 }
