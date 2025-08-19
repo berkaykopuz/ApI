@@ -1,12 +1,12 @@
 package net.kopuz.ApI.controller;
 
+import net.kopuz.ApI.dto.QueryRequest;
 import net.kopuz.ApI.service.AIService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 public class AIController {
@@ -17,8 +17,13 @@ public class AIController {
     }
 
     @GetMapping("/api/prompt")
-    public ResponseEntity<?> getResponse(@RequestParam("query") String query){
-        return new ResponseEntity<>(aiService.chat(query), HttpStatus.OK);
+    public ResponseEntity<?> getResponse(@RequestBody QueryRequest request){
+
+        if(request.getConversationId() == null || request.getConversationId().isEmpty()){
+            request.setConversationId(UUID.randomUUID().toString());
+        }
+
+        return new ResponseEntity<>(aiService.chat(request.getQuery(), request.getConversationId()), HttpStatus.OK);
     }
     
 }
