@@ -42,7 +42,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/api/auth/token", "/api/auth/validate").permitAll()
                                 .requestMatchers(PathRequest.toH2Console()).permitAll()
-                                .requestMatchers("/api/prompt/**").permitAll()
+                                .requestMatchers("/api/prompt").permitAll()
                                 .requestMatchers("/api/users/**").hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

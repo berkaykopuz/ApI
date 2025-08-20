@@ -16,7 +16,7 @@ public class AIController {
         this.aiService = aiService;
     }
 
-    @GetMapping("/api/prompt")
+    @PostMapping("/api/prompt")
     public ResponseEntity<?> getResponse(@RequestBody QueryRequest request){
 
         if(request.getConversationId() == null || request.getConversationId().isEmpty()){
