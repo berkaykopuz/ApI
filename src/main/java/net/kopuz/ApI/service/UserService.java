@@ -86,6 +86,16 @@ public class UserService {
         return UserDto.convert(user);
     }
 
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new RuntimeException("User not found"));
+
+        return UserDto.convert(user);
+    }
+
+    public List<String> getCitiesOfUsers(){
+        return getAllUsers().stream().map(UserDto::birthPlace).collect(Collectors.toList());
+    }
+
     public UserDto updateUser(UserDto userDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User not found"));
 

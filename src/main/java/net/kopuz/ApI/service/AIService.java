@@ -2,6 +2,7 @@ package net.kopuz.ApI.service;
 
 import net.kopuz.ApI.exception.BadQueryRequestException;
 import net.kopuz.ApI.tool.DateTool;
+import net.kopuz.ApI.tool.UserTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -14,13 +15,15 @@ import static org.springframework.ai.chat.client.ChatClient.builder;
 @Service
 public class AIService {
     private final DateTool dateTool;
+    private final UserTool userTool;
     private final OpenAiChatModel chatModel;
     private final ChatClient chatClient;
     private final ChatMemory chatMemory;
 
 
-    public AIService(DateTool dateTool, OpenAiChatModel chatModel, ChatMemory chatMemory) {
+    public AIService(DateTool dateTool, UserTool userTool, OpenAiChatModel chatModel, ChatMemory chatMemory) {
         this.dateTool = dateTool;
+        this.userTool = userTool;
         this.chatModel = chatModel;
         this.chatMemory = MessageWindowChatMemory.builder().maxMessages(20).build();
         this.chatClient = builder(chatModel).defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build()).build();
@@ -35,7 +38,7 @@ public class AIService {
         String response = chatClient
                 .prompt()
                 .user(query)
-                //.tools(dateTool)
+                .tools(dateTool, userTool)
                 .advisors(a ->
                         a.param(ChatMemory.CONVERSATION_ID, conversationId)
                 )
